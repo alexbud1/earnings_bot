@@ -11,7 +11,7 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.dispatcher import FSMContext
 
 
-API_TOKEN = 'Token'
+API_TOKEN = '5315460310:AAEFeFr0pAuArhpV3kZBN8e7ZvXrg5j40_w'
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -54,7 +54,7 @@ async def keyboard(message: types.Message, state: FSMContext):
 			##### register user
 			data[str(message.from_user.id)] = '0'
 			with open("earnings.json", "w") as jsonFile:
-				json.dump(data, jsonFile)
+				json.dump(data, jsonFile, indent=4, separators=(", ", " :"))
 			await message.reply("You have not been registered yet.\nNow you were registered.\nYou are welcome!")
 
 	if message.text == 'Add Earnings':
@@ -78,7 +78,7 @@ async def add_amount(message: types.Message, state: FSMContext):
 ##### listener for inline keyboard, especially '✅'
 @dp.callback_query_handler(text="agree",state = Form.amount)
 async def agree_inline(call: types.CallbackQuery, state: FSMContext):
-	await call.message.answer('You agreed')
+	await call.message.answer('You have added sum! 👍')
 	##### open json file and add value to sum
 	user_data = await state.get_data()
 	users_input = user_data['number']
@@ -87,7 +87,7 @@ async def agree_inline(call: types.CallbackQuery, state: FSMContext):
 	balance = int(data.get(str(call.from_user.id))) + users_input
 	data[str(call.from_user.id)] = balance
 	with open("earnings.json", "w") as jsonFile:
-		json.dump(data, jsonFile)
+		json.dump(data, jsonFile, indent=4, separators=(", ", ": "))
 	await call.message.edit_text("Are you sure, that you have entered correct data?")
 	##### disposing of circle in inline button 
 	await call.answer()
@@ -97,7 +97,7 @@ async def agree_inline(call: types.CallbackQuery, state: FSMContext):
 ##### listener for inline keyboard, especially '❌'
 @dp.callback_query_handler(text="disagree",state = Form.amount)
 async def disagree_inline(call: types.CallbackQuery, state: FSMContext):
-	await call.message.answer('You disagreed')
+	await call.message.answer('Your choice canceled ⛔️')
 
 	await call.message.edit_text("Are you sure, that you have entered correct data?")
 	##### disposing of circle in inline button 
